@@ -1,20 +1,36 @@
-public class Bin {
+public class Bestfit {
     private int[][] temp;
     private int countBin;
 
-    public Bin(int n) {
+    public Bestfit(int n) {
         temp = new int[n][n];
         countBin = 0;
     }
 
-    public int bestfit(int[] weight, int c, int n) {
+    public int[][] getTemp() {
+        return temp;
+    }
+
+    public void setTemp(int[][] temp) {
+        this.temp = temp;
+    }
+
+    public int getCountBin() {
+        return countBin;
+    }
+
+    public void setCountBin(int countBin) {
+        this.countBin = countBin;
+    }
+
+    public void bestfit(int[] weight, int c, int n) {
         int[] remainList = new int[n];
 
         for (int i = 0; i < n; i++) {
-            int min = c + 1, bi = 0;
+            int min = c + 1, best = 0;
             for (int j = 0; j < countBin; j++) {
                 if (remainList[j] >= weight[i] && remainList[j] - weight[i] < min) {
-                    bi = j;
+                    best = j;
                     min = remainList[j] - weight[i];
                 }
             }
@@ -24,17 +40,16 @@ public class Bin {
                 temp[countBin][0] = weight[i]; // Assign the weight to the first position in the bin
                 countBin++;
             } else {
-                remainList[bi] -= weight[i];
+                remainList[best] -= weight[i];
                 for (int k = 0; k < n; k++) {
-                    if (temp[bi][k] == 0) {
-                        temp[bi][k] = weight[i]; // Find the first empty slot in the bin and assign the weight
+                    if (temp[best][k] == 0) {
+                        temp[best][k] = weight[i]; // Find the first empty slot in the bin and assign the weight
                         break;
                     }
                 }
             }
         }
         printBestFitValue(); // Print only the filled bins
-        return countBin;
     }
 
     public void printBestFitValue() {
