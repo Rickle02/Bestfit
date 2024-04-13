@@ -4,8 +4,14 @@ import java.io.IOException;
 
 public class ReadDataFromFile {
 
-    public static int[] readDataFromFile(String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
+    private String filename;
+
+    public ReadDataFromFile(String filename) {
+        this.filename = filename;
+    }
+
+    public int[] readDataFromFile() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(this.filename));
         int[] data = new int[10000];
         int index = 0;
         String line;

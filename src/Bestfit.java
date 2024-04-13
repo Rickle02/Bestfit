@@ -1,9 +1,10 @@
 public class Bestfit {
+    private int[] data;
     private int[][] temp;
     private int countBin;
 
-    public Bestfit(int n) {
-        temp = new int[n][n];
+    public Bestfit(int[] data) {
+        this.data = data;
         countBin = 0;
     }
 
@@ -23,7 +24,16 @@ public class Bestfit {
         this.countBin = countBin;
     }
 
+    public int[] getData() {
+        return data;
+    }
+
+    public void setData(int[] data) {
+        this.data = data;
+    }
+
     public void bestfit(int[] weight, int c, int n) {
+        this.temp = new int[n][n];
         int[] remainList = new int[n];
 
         for (int i = 0; i < n; i++) {
@@ -62,5 +72,22 @@ public class Bestfit {
             }
             System.out.println();
         }
+        System.out.println("Number of bins required in Best Fit :  " + getCountBin());
+        System.out.println();
+    }
+
+    public void process(){
+        int rows = data[0];
+        int capacity = data[1];
+        int[][] weightCounts = new int[rows][2];
+        for (int i = 0; i < rows; i++) {
+            weightCounts[i][0] = data[i * 2 + 2]; // Weight
+            weightCounts[i][1] = data[i * 2 + 3]; // Count
+        }
+        int []weight = new int[rows];
+        for (int i = 0; i< rows; i++){
+            weight[i] = weightCounts[i][0];
+        }
+        bestfit(weight, capacity, rows);
     }
 }
