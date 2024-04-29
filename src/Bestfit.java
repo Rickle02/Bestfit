@@ -1,4 +1,13 @@
-public class Bestfit {
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.stage.Stage;
+import static javafx.application.Application.launch;
+
+public class Bestfit  {
     private int[] data;
     private int[][] temp;
     private int countBin;
@@ -37,7 +46,7 @@ public class Bestfit {
         int[] remainList = new int[n];
 
         for (int i = 0; i < n; i++) {
-            int min = c + 1, best = 0;
+            int min = c, best = 0;
             for (int j = 0; j < countBin; j++) {
                 if (remainList[j] >= weight[i] && remainList[j] - weight[i] < min) {
                     best = j;
@@ -45,7 +54,7 @@ public class Bestfit {
                 }
             }
 
-            if (min == c + 1) {
+            if (min == c) {
                 remainList[countBin] = c - weight[i];
                 temp[countBin][0] = weight[i]; // Assign the weight to the first position in the bin
                 countBin++;
@@ -60,6 +69,7 @@ public class Bestfit {
             }
         }
         printBestFitValue(); // Print only the filled bins
+//        drawBarChart();
     }
 
     public void printBestFitValue() {
@@ -76,6 +86,39 @@ public class Bestfit {
         System.out.println();
     }
 
+
+//    private void drawBarChart() {
+//        launch();
+//    }
+//
+//    @Override
+//    public void start(Stage stage) {
+//        final CategoryAxis xAxis = new CategoryAxis();
+//        final NumberAxis yAxis = new NumberAxis();
+//        final BarChart<String, Number> barChart =
+//                new BarChart<>(xAxis, yAxis);
+//        barChart.setTitle("Bin Utilization");
+//        xAxis.setLabel("Bins");
+//        yAxis.setLabel("Total Weight");
+//
+//        XYChart.Series<String, Number> series = new XYChart.Series<>();
+//        for (int i = 0; i < getCountBin(); i++) {
+//            int sum = 0;
+//            for (int j = 0; j < temp[i].length; j++) {
+//                if (temp[i][j] != 0) {
+//                    sum += temp[i][j];
+//                }
+//            }
+//            series.getData().add(new XYChart.Data<>("Bin " + (i + 1), sum));
+//        }
+//
+//        Scene scene = new Scene(barChart, 800, 600);
+//        barChart.getData().add(series);
+//
+//        stage.setScene(scene);
+//        stage.show();
+//    }
+
     public void process(){
         int rows = data[0];
         int capacity = data[1];
@@ -84,9 +127,21 @@ public class Bestfit {
             weightCounts[i][0] = data[i * 2 + 2]; // Weight
             weightCounts[i][1] = data[i * 2 + 3]; // Count
         }
-        int []weight = new int[rows];
-        for (int i = 0; i< rows; i++){
-            weight[i] = weightCounts[i][0];
+        // Calculate the total size of weight[] array
+        int totalWeights = 0;
+        for (int i = 0; i < rows; i++) {
+            totalWeights += weightCounts[i][1]; // Add count of each weight
+        }
+
+        // Populate weight[] array
+        int[] weight = new int[totalWeights];
+        int index = 0;
+        for (int i = 0; i < rows; i++) {
+            int weightValue = weightCounts[i][0];
+            int count = weightCounts[i][1];
+            for (int j = 0; j < count; j++) {
+                weight[index++] = weightValue; // Repeat weight according to count
+            }
         }
         bestfit(weight, capacity, rows);
     }
